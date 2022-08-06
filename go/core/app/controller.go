@@ -1,18 +1,31 @@
 package app
 
-import "github.com/AlperKocaman/server-with-aws/core/response"
+import (
+	"bytes"
+	"github.com/AlperKocaman/server-with-aws/core/aws"
+	"github.com/AlperKocaman/server-with-aws/core/response"
+	"github.com/google/uuid"
+	"log"
+)
 
 type Controller interface {
 	ListObjects() (response.Responder, error)
-	SaveObject(param SaveObjectParam) (response.Responder, error)
-	GetObject(param GetObjectParam) (response.Responder, error)
+	SaveObject(params SaveObjectParam) (response.Responder, error)
+	GetObject(params GetObjectParam) (response.Responder, error)
 }
 
 type controller struct {
+	S3ServiceClient *aws.S3ServiceClient
 }
 
 func NewController() Controller {
-	return controller{}
+	c, err := aws.GetS3ServiceClient()
+	if err != nil {
+		log.Panicln("Cannot instantiate controller due to aws client")
+	}
+	return controller{
+		S3ServiceClient: c,
+	}
 }
 
 func NewDefaultController() Controller {
@@ -23,20 +36,47 @@ func (c controller) ListObjects() (response.Responder, error) {
 	// GET /picus/list
 	// return objects on the S3 bucket
 
-	return ListObjectsSerializer{Key: "Deneme"}, nil
+	log.Println("location: ListObjectsController")
+
+	objects, err := c.S3ServiceClient.ListObjects()
+	if err != nil {
+		return nil, response.ServiceUnableError
+	}
+
+	return ListObjectsSerializer{Objects: objects}, nil
 }
 
-func (c controller) SaveObject(param SaveObjectParam) (response.Responder, error) {
+func (c controller) SaveObject(params SaveObjectParam) (response.Responder, error) {
 	// POST /picus/put
 	// save given JSON data to the S3 bucket
 
-	return SaveObjectSerializer{Key: "Deneme"}, nil
+	log.Println("location: SaveObjectController")
+
+	// if user sends a key with data, save the data with that key, otherwise generate a key
+	key := params.Key
+	if key == "" {
+		key = uuid.New().String()
+	}
+
+	err := c.S3ServiceClient.Upload(key, bytes.NewReader(params.Data))
+	if err != nil {
+		return nil, response.ServiceUnableError
+	}
+
+	return SaveObjectSerializer{Key: key}, nil
 }
 
-func (c controller) GetObject(param GetObjectParam) (response.Responder, error) {
+func (c controller) GetObject(params GetObjectParam) (response.Responder, error) {
 	// GET /picus/get/:key
 	// return content of given key from S3
 
-	return GetObjectSerializer{Key: "Deneme"}, nil
+	log.Println("location: GetObjectController")
+
+	object, err := c.S3ServiceClient.GetObject(params.Key)
+	if err != nil {
+		return nil, response.ServiceUnableError
+	}
+
+	return GetObjectSerializer{Content: object}, nil
 
 }

@@ -17,8 +17,8 @@ type router struct {
 	controller Controller
 }
 
-func NewRouter(dController Controller) Router {
-	return router{controller: dController}
+func NewRouter(controller Controller) Router {
+	return router{controller: controller}
 }
 
 func NewDefaultRouter() Router {
@@ -32,13 +32,13 @@ func (r router) Register(group *gin.RouterGroup) {
 }
 
 func (r router) ListObjects(c *gin.Context) {
-	log.Println("location: ListObjects")
+	log.Println("location: ListObjectsRouter")
 
 	c.JSON(response.Generate(r.controller.ListObjects()))
 }
 
 func (r router) SaveObject(c *gin.Context) {
-	log.Println("location: SaveObject")
+	log.Println("location: SaveObjectRouter")
 
 	var param SaveObjectParam
 
@@ -51,7 +51,7 @@ func (r router) SaveObject(c *gin.Context) {
 }
 
 func (r router) GetObject(c *gin.Context) {
-	log.Println("location: GetObject")
+	log.Println("location: GetObjectRouter")
 
 	var param GetObjectParam
 

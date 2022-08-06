@@ -1,17 +1,25 @@
 package app
 
+import (
+	"github.com/AlperKocaman/server-with-aws/core/aws"
+)
+
 // TODO: Change all searializers/responses
 
 type ListObjectsSerializer struct {
-	Key string
+	Objects []aws.Object
 }
 
 type ListObjectsResponse struct {
-	Key string `json:"key"`
+	FoundObjectNumber int
+	Objects           []aws.Object
 }
 
 func (l ListObjectsSerializer) Response() interface{} {
-	return ListObjectsResponse(l)
+	return ListObjectsResponse{
+		Objects:           l.Objects,
+		FoundObjectNumber: len(l.Objects),
+	}
 }
 
 type SaveObjectSerializer struct {
@@ -27,11 +35,11 @@ func (l SaveObjectSerializer) Response() interface{} {
 }
 
 type GetObjectSerializer struct {
-	Key string
+	Content aws.Content
 }
 
 type GetObjectResponse struct {
-	Key string `json:"key"`
+	Content aws.Content
 }
 
 func (l GetObjectSerializer) Response() interface{} {
