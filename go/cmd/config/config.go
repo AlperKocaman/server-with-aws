@@ -18,12 +18,15 @@ type Server struct {
 }
 
 type AWS struct {
-	Region string
-	S3     S3 `mapstructure:"s3"`
+	Region         string
+	AccessKeyID    string
+	SecretAcessKey string
+	SessionToken   string
+	S3             S3 `mapstructure:"s3"`
 }
 
 type S3 struct {
-	BucketName string
+	Bucket string
 }
 
 func InitializeConfig() error {
@@ -36,13 +39,13 @@ func InitializeConfig() error {
 	viper.SetConfigType("yml")
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading config file, %s", err)
+		log.Printf("Error reading config file, %s", err)
 		return err
 	}
 
 	err := viper.Unmarshal(&config)
 	if err != nil {
-		log.Fatalf("Unable to decode into config struct, %v", err)
+		log.Printf("Unable to decode into config struct, %v", err)
 		return err
 	}
 

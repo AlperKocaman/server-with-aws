@@ -4,6 +4,9 @@ server:
 
 aws:
   region: eu-central-1
+  accesskeyid:    key # change here before use
+  secretacesskey: secret # change here before use
+  sessiontoken:   token # change here before use
   s3:
-    bucketname:
+    bucket: bucket # change here before use
 
