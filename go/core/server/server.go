@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/AlperKocaman/server-with-aws/cmd/config"
 	"github.com/AlperKocaman/server-with-aws/core/app"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/secure"
@@ -15,12 +16,16 @@ func InitializeServer() error {
 
 	setupRouter(engine)
 
-	err := engine.Run("127.0.0.1:8080") // TODO: read from config
+	err := engine.Run(getRunAddress())
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func getRunAddress() string {
+	return config.Get().Server.Host + ":" + config.Get().Server.Port
 }
 
 func setupRouter(router *gin.Engine) *gin.Engine {
