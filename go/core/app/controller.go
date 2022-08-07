@@ -40,7 +40,7 @@ func (c controller) ListObjects() (response.Responder, error) {
 
 	objects, err := c.S3ServiceClient.ListObjects()
 	if err != nil {
-		return nil, response.ServiceUnableError
+		return nil, response.ServiceUnavailableError
 	}
 
 	return ListObjectsSerializer{Objects: objects}, nil
@@ -58,9 +58,9 @@ func (c controller) SaveObject(params SaveObjectParam) (response.Responder, erro
 		key = uuid.New().String()
 	}
 
-	err := c.S3ServiceClient.Upload(key, bytes.NewReader(params.Data))
+	err := c.S3ServiceClient.Upload(key, bytes.NewReader([]byte(params.Data.(string))))
 	if err != nil {
-		return nil, response.ServiceUnableError
+		return nil, response.ServiceUnavailableError
 	}
 
 	return SaveObjectSerializer{Key: key}, nil
@@ -72,9 +72,16 @@ func (c controller) GetObject(params GetObjectParam) (response.Responder, error)
 
 	log.Println("location: GetObjectController")
 
+	if params.Key == "" {
+		log.Println("Request without key")
+		return nil, response.BadRequest
+	}
+
 	object, err := c.S3ServiceClient.GetObject(params.Key)
 	if err != nil {
-		return nil, response.ServiceUnableError
+		// TODO: check "NoSuchKey" (404) error here
+		// TODO: also check buffer reading error (500)
+		return nil, response.ServiceUnavailableError
 	}
 
 	return GetObjectSerializer{Content: object}, nil

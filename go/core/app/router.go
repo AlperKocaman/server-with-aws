@@ -28,7 +28,7 @@ func NewDefaultRouter() Router {
 func (r router) Register(group *gin.RouterGroup) {
 	group.GET("list", r.ListObjects)
 	group.POST("put", r.SaveObject)
-	group.GET("get/:key", r.GetObject)
+	group.GET("get", r.GetObject)
 }
 
 func (r router) ListObjects(c *gin.Context) {

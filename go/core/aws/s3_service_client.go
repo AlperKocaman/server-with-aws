@@ -57,10 +57,20 @@ func (c S3ServiceClient) GetObject(key string) (Content, error) {
 		return Content{}, err
 	}
 
+	cLength := *res.ContentLength
+	buf := make([]byte, cLength)
+	read, err := res.Body.Read(buf)
+	if read <= 0 || (err != nil && err != io.EOF) {
+		log.Println("Error while reading content into buffer")
+		return Content{}, err
+	}
+
 	log.Printf("Successfully get object with key: %s", key)
 	return Content{
-		Data:         res.String(),
-		LastModified: res.LastModified,
+		Data:          string(buf),
+		LastModified:  res.LastModified,
+		ContentLength: cLength,
+		ContentType:   aws.StringValue(res.ContentType),
 	}, nil
 }
 
