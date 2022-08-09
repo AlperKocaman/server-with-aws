@@ -34,7 +34,7 @@ func InitializeConfig() error {
 	log.Println("Initializing config...")
 
 	viper.SetConfigName("config")
-	viper.AddConfigPath("./config")
+	viper.AddConfigPath("./cmd/config")
 	viper.AutomaticEnv()
 	viper.SetConfigType("yml")
 
