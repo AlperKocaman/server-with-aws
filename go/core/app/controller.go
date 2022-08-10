@@ -74,14 +74,12 @@ func (c controller) GetObject(params GetObjectParam) (response.Responder, error)
 
 	if params.Key == "" {
 		log.Println("Request without key")
-		return nil, response.BadRequest
+		return nil, response.BadRequestError
 	}
 
 	object, err := c.S3ServiceClient.GetObject(params.Key)
 	if err != nil {
-		// TODO: check "NoSuchKey" (404) error here
-		// TODO: also check buffer reading error (500)
-		return nil, response.ServiceUnavailableError
+		return nil, err
 	}
 
 	return GetObjectSerializer{Content: object}, nil

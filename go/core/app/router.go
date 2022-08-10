@@ -43,7 +43,7 @@ func (r router) SaveObject(c *gin.Context) {
 	var param SaveObjectParam
 
 	if err := c.ShouldBindJSON(&param); err != nil {
-		c.JSON(response.Generate(nil, response.BadRequest))
+		c.JSON(response.Generate(nil, response.BadRequestError))
 		return
 	}
 
@@ -56,7 +56,7 @@ func (r router) GetObject(c *gin.Context) {
 	var param GetObjectParam
 
 	if err := c.ShouldBindQuery(&param); err != nil {
-		c.JSON(response.Generate(nil, response.BadRequest))
+		c.JSON(response.Generate(nil, response.BadRequestError))
 		return
 	}
 
