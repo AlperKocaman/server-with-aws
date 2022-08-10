@@ -11,8 +11,8 @@ type ListObjectsSerializer struct {
 }
 
 type ListObjectsResponse struct {
-	FoundObjectNumber int
-	Objects           []aws.Object
+	FoundObjectNumber int          `json:"found_object_number"`
+	Objects           []aws.Object `json:"objects"`
 }
 
 func (l ListObjectsSerializer) Response() interface{} {
@@ -39,7 +39,7 @@ type GetObjectSerializer struct {
 }
 
 type GetObjectResponse struct {
-	Content aws.Content
+	Content aws.Content `json:"content"`
 }
 
 func (l GetObjectSerializer) Response() interface{} {
