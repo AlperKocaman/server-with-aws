@@ -41,7 +41,7 @@ jobs:
         run:  cd go && go build -v ./...
         
       - name: Get linter
-        run:  go get -u golang.org/x/lint/golint
+        run:  cd go && go get -u golang.org/x/lint/golint
         
       - name: Run vet & lint
         run: |
