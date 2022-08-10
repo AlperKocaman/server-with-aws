@@ -10,11 +10,8 @@ import (
 	"time"
 )
 
-func InitializeServer() error {
-
-	engine := gin.Default()
-
-	setupRouter(engine)
+func InitAndRunServer() error {
+	engine := InitializeServer()
 
 	err := engine.Run(getRunAddress())
 	if err != nil {
@@ -22,6 +19,15 @@ func InitializeServer() error {
 	}
 
 	return nil
+}
+
+func InitializeServer() *gin.Engine {
+
+	engine := gin.Default()
+
+	setupRouter(engine)
+
+	return engine
 }
 
 func getRunAddress() string {
