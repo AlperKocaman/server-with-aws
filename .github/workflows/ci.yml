@@ -45,8 +45,9 @@ jobs:
         
       - name: Run vet & lint
         run: |
-          cd go && go vet .
-          cd go && golint .
+          cd go
+          go vet .
+          golint .
       
       - name: Run tests
         run:  cd go && go test -v ./...
