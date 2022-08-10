@@ -2,7 +2,9 @@ package aws
 
 import (
 	"github.com/AlperKocaman/server-with-aws/cmd/config"
+	"github.com/AlperKocaman/server-with-aws/core/response"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -53,8 +55,11 @@ func (c S3ServiceClient) GetObject(key string) (Content, error) {
 	})
 
 	if err != nil {
+		if err.(awserr.Error).Code() == s3.ErrCodeNoSuchKey {
+			return Content{}, response.NotFoundError
+		}
 		log.Printf("Error while getting object with key: %s, err: %v", key, err)
-		return Content{}, err
+		return Content{}, response.ServiceUnavailableError
 	}
 
 	cLength := *res.ContentLength
@@ -62,13 +67,12 @@ func (c S3ServiceClient) GetObject(key string) (Content, error) {
 	read, err := res.Body.Read(buf)
 	if read <= 0 || (err != nil && err != io.EOF) {
 		log.Println("Error while reading content into buffer")
-		return Content{}, err
+		return Content{}, response.InternalServerError
 	}
 
 	log.Printf("Successfully get object with key: %s", key)
 	return Content{
 		Data:          string(buf),
-		LastModified:  res.LastModified,
 		ContentLength: cLength,
 		ContentType:   aws.StringValue(res.ContentType),
 	}, nil
@@ -86,9 +90,8 @@ func (c S3ServiceClient) ListObjects() ([]Object, error) {
 	res := make([]Object, 0)
 	for _, content := range objects.Contents {
 		res = append(res, Object{
-			Key:          aws.StringValue(content.Key),
-			LastModified: content.LastModified,
-			Size:         aws.Int64Value(content.Size),
+			Key:  aws.StringValue(content.Key),
+			Size: aws.Int64Value(content.Size),
 		})
 	}
 
