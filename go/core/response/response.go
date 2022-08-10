@@ -12,12 +12,14 @@ type Responder interface {
 const (
 	HTTPStatusOKCode          = http.StatusOK
 	BadRequestErrorCode       = http.StatusBadRequest
+	NotFoundErrorCode         = http.StatusNotFound
 	InternalServerErrCode     = http.StatusInternalServerError
 	ServiceUnavailableErrCode = http.StatusServiceUnavailable
 )
 
 var (
-	BadRequest              = errors.New("bad request")
+	BadRequestError         = errors.New("bad request")
+	NotFoundError           = errors.New("not found")
 	InternalServerError     = errors.New("internal server error")
 	ServiceUnavailableError = errors.New("service unavailable")
 )
@@ -43,8 +45,11 @@ type GenericError struct {
 func Generate(data Responder, err error) (int, interface{}) {
 	if err != nil {
 		resp := GenericError{}
-		if errors.Is(err, BadRequest) {
+		if errors.Is(err, BadRequestError) {
 			resp.Generic.Code = BadRequestErrorCode
+			resp.Message = err.Error()
+		} else if errors.Is(err, NotFoundError) {
+			resp.Generic.Code = NotFoundErrorCode
 			resp.Message = err.Error()
 		} else if errors.Is(err, InternalServerError) {
 			resp.Generic.Code = InternalServerErrCode
