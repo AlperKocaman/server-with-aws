@@ -40,14 +40,17 @@ jobs:
       - name: Build
         run:  cd go && go build -v ./...
         
-      - name: Get linter
-        run:  cd go && go get -u golang.org/x/lint/golint
-        
-      - name: Run vet & lint
-        run: |
-          cd go
-          go vet .
-          golint .
+      - name: Run vet
+        run: cd go && go vet .
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.47.1
+          working-directory: go
+          skip-cache: true
+          skip-pkg-cache: true
+          skip-build-cache: true
       
       - name: Run tests
         run:  cd go && go test -v ./...
