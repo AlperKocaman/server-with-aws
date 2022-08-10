@@ -14,13 +14,13 @@ func main() {
 		}
 	}()
 
-	err := config.InitializeConfig()
+	err := config.InitializeConfigForApp()
 	if err != nil {
 		log.Fatal("error while reading config, exiting.")
 	}
 
 	log.Println("Starting http server...")
-	err = server.InitializeServer()
+	err = server.InitAndRunServer()
 	if err != nil {
 		log.Fatal("error while starting server, exiting.")
 		return
