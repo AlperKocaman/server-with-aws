@@ -1,0 +1,12 @@
+server:
+  host: 127.0.0.1
+  port: 8080
+
+aws:
+  region: eu-central-1
+  accesskeyid:    key # change here before use
+  secretacesskey: secret # change here before use
+  sessiontoken:   token # change here before use
+  s3:
+    bucket: bucket # change here before use
+

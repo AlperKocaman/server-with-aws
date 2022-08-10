@@ -5,6 +5,11 @@ import (
 	"log"
 )
 
+const (
+	AppConfig  = "config"
+	TestConfig = "config-test"
+)
+
 var config *Config
 
 type Config struct {
@@ -29,11 +34,19 @@ type S3 struct {
 	Bucket string
 }
 
-func InitializeConfig() error {
+func InitializeConfigForApp() error {
+	return InitializeConfig(AppConfig)
+}
+
+func InitializeConfigForTest() error {
+	return InitializeConfig(TestConfig)
+}
+
+func InitializeConfig(configName string) error {
 
 	log.Println("Initializing config...")
 
-	viper.SetConfigName("config")
+	viper.SetConfigName(configName)
 	viper.AddConfigPath("./cmd/config")
 	viper.AutomaticEnv()
 	viper.SetConfigType("yml")
