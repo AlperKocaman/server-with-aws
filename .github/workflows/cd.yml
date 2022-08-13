@@ -27,9 +27,9 @@
 name: Deploy to Amazon ECS
 
 on:
-  push:
-    branches:
-      - "main"
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
 
 env:
   AWS_REGION: MY_AWS_REGION                   # set this to your preferred AWS region, e.g. us-west-1
