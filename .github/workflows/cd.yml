@@ -24,11 +24,12 @@
 #    See the documentation for each action used below for the recommended IAM policies for this IAM user,
 #    and best practices on handling the access key credentials.
 
-name: Deploy to Amazon ECS
+name: CD
 
 on:
   workflow_run:
     workflows: ["CI"]
+    branches: [main]
     types:
       - completed
 
@@ -48,6 +49,7 @@ permissions:
 jobs:
   deploy:
     name: Deploy
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     environment: production
 
