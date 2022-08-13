@@ -49,7 +49,8 @@ func TestController_SaveObject(t *testing.T) {
 
 		t.Run(tt.name, func(t *testing.T) {
 			gofight.New().
-				GET("/picus/list").
+				POST("/picus/put").
+				SetJSONInterface(tt.requestBody).
 				Run(handler, func(r gofight.HTTPResponse, request gofight.HTTPRequest) {
 					response = r
 				})
