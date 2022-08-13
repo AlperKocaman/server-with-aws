@@ -3,10 +3,11 @@ server:
   port: 8080
 
 aws:
-  region: eu-central-1
-  accesskeyid:    key # change here before use
-  secretacesskey: secret # change here before use
-  sessiontoken:   token # change here before use
+  # In order to use the app, the following environment values must be available in the system.
+  # AWS_ACCESS_KEY_ID
+  # AWS_SECRET_ACCESS_KEY
+  # AWS_SESSION_TOKEN
+  # AWS_REGION
   s3:
-    bucket: bucket # change here before use
+    bucket: bucket_name # default bucket name, if an environment variable with "AWS_S3_BUCKET_NAME" key is set, this value will be overridden.
 

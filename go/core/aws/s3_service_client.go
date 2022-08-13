@@ -5,7 +5,6 @@ import (
 	"github.com/AlperKocaman/server-with-aws/core/response"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -33,13 +32,8 @@ func GetS3ServiceClient() (*S3ServiceClient, error) {
 func getAWSSession() (*session.Session, error) {
 	log.Println("Getting session of aws...")
 
-	sess, err := session.NewSession(&aws.Config{
-		Credentials: credentials.NewStaticCredentials(
-			config.Get().AWS.AccessKeyID,
-			config.Get().AWS.SecretAcessKey,
-			config.Get().AWS.SessionToken),
-		Region: aws.String(config.Get().AWS.Region),
-	})
+	sess, err := session.NewSession()
+
 	if err != nil {
 		log.Printf("Error while getting AWS S3 session, err: %v", err)
 		return nil, err

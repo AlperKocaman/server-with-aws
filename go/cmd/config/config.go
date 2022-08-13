@@ -3,11 +3,15 @@ package config
 import (
 	"github.com/spf13/viper"
 	"log"
+	"os"
 )
 
 const (
 	AppConfig  = "config"
 	TestConfig = "config-test"
+
+	AWSS3BucketConf = "aws.s3.bucket"
+	AWSS3BucketEnv  = "AWS_S3_BUCKET_NAME"
 )
 
 var config *Config
@@ -23,11 +27,7 @@ type Server struct {
 }
 
 type AWS struct {
-	Region         string
-	AccessKeyID    string
-	SecretAcessKey string
-	SessionToken   string
-	S3             S3 `mapstructure:"s3"`
+	S3 S3 `mapstructure:"s3"`
 }
 
 type S3 struct {
@@ -55,6 +55,8 @@ func InitializeConfig(configName string) error {
 		log.Printf("Error reading config file, %s", err)
 		return err
 	}
+
+	viper.Set(AWSS3BucketConf, os.Getenv(AWSS3BucketEnv))
 
 	err := viper.Unmarshal(&config)
 	if err != nil {
