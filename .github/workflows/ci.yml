@@ -64,7 +64,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_ARN }}
-          role-duration-seconds: 120
+          role-duration-seconds: 900 # must have value greater than or equal to 900
           aws-region: ${{ secrets.AWS_REGION }}
       
       - name: Run tests
