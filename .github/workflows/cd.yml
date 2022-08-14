@@ -26,6 +26,7 @@
 
 name: CD
 
+
 on:
   workflow_run:
     workflows: ["CI"]
@@ -34,14 +35,14 @@ on:
       - completed
 
 env:
-  AWS_REGION: MY_AWS_REGION                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: MY_ECR_REPOSITORY           # set this to your Amazon ECR repository name
-  ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
-                                               # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: MY_CONTAINER_NAME           # set this to the name of the container in the
-                                               # containerDefinitions section of your task definition
+  AWS_REGION: ${{ secrets.AWS_REGION }}                   # set this to your preferred AWS region, e.g. us-west-1
+  ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}          # set this to your Amazon ECR repository name
+  ECS_SERVICE: ${{ secrets.AWS_ECS_SERVICE }}              # set this to your Amazon ECS service name
+  ECS_CLUSTER: ${{ secrets.AWS_ECS_CLUSTER }}               # set this to your Amazon ECS cluster name
+  ECS_TASK_DEFINITION: ${{ secrets.AWS_ECS_TASK_DEFINITION }}     # set this to the path to your Amazon ECS task definition
+                                                  # file, e.g. .aws/task-definition.json
+  CONTAINER_NAME: server-with-aws              # set this to the name of the container in the
+                                                  # containerDefinitions section of your task definition
 
 permissions:
   contents: read
@@ -49,7 +50,7 @@ permissions:
 jobs:
   deploy:
     name: Deploy
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # run this workflow if and only if previous "CI" workflow successfully completed
     runs-on: ubuntu-latest
     environment: production
 
