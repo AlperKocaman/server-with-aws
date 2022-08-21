@@ -43,7 +43,8 @@ env:
                                                   # containerDefinitions section of your task definition
 
 permissions:
-  contents: read
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
 
 jobs:
   deploy:
