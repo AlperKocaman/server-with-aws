@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "313da96c-24d6-4ae3-8be3-e70ea033cd14",
+		"name": "Server With AWS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19000807"
+	},
+	"item": [
+		{
+			"name": "Save Object",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"key\": \"test\",\n    \"data\": \"This is the test data.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://3.73.0.248:8080/picus/put",
+					"protocol": "http",
+					"host": [
+						"3",
+						"73",
+						"0",
+						"248"
+					],
+					"port": "8080",
+					"path": [
+						"picus",
+						"put"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Object",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://3.73.0.248:8080/picus/get?key=test",
+					"protocol": "http",
+					"host": [
+						"3",
+						"73",
+						"0",
+						"248"
+					],
+					"port": "8080",
+					"path": [
+						"picus",
+						"get"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "test"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Objects",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://3.73.0.248:8080/picus/list",
+					"protocol": "http",
+					"host": [
+						"3",
+						"73",
+						"0",
+						"248"
+					],
+					"port": "8080",
+					"path": [
+						"picus",
+						"list"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
