@@ -23,11 +23,14 @@ The technologies/services used in the project are as follows:
 
 ### AWS IAM
 
-| Type   | Name                                     | Permissions                                                                      |
-|--------|------------------------------------------|----------------------------------------------------------------------------------|
-| Policy | ```S3PicusBucketReadWriteAccessPolicy``` | ```"s3:PutObject"```,```"s3:GetObject"```,```"s3:ListBucket" ```                 |
-| Role   | ```github-actions-role```                | ```S3PicusBucketReadWriteAccessPolicy```                                         |
-| Role   | ```ecs-task-role```                      | ```S3PicusBucketReadWriteAccessPolicy```, ```AmazonECSTaskExecutionRolePolicy``` |
+| Type   | Name                                     | Permissions                                                                                                                                                                            |
+|--------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Policy | ```S3PicusBucketReadWriteAccessPolicy``` | ```"s3:PutObject"```,```"s3:GetObject"```,```"s3:ListBucket" ```                                                                                                                       |
+| Policy | ```ecr-push-policy```                    | ```"ecr:CompleteLayerUpload"```,```"ecr:TagResource"```,```"ecr:UploadLayerPart"```,<br/>```"ecr:InitiateLayerUpload"```,```"ecr:BatchCheckLayerAvailability"```,```"ecr:PutImage" ``` |
+| Policy | ```ecs-task-definition-policy```         | ```"ecs:UpdateService"```,```"ecs:DescribeServices"```,```"ecs:RegisterTaskDefinition"```,<br/>```"ecs:DescribeTaskDefinition"```                                                      |
+| Policy | ```iam-pass-policy```                    | ```"iam:PassRole" ```                                                                                                                                                                  |
+| Role   | ```github-actions-role```                | ```S3PicusBucketReadWriteAccessPolicy```                                                                                                                                               |
+| Role   | ```ecs-task-role```                      | ```S3PicusBucketReadWriteAccessPolicy```, ```AmazonECSTaskExecutionRolePolicy```, ```ecr-push-policy```,<br/> ```ecs-task-definition-policy```, ```iam-pass-policy```                  |
 
 ### AWS Network&Security
 
